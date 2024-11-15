@@ -187,9 +187,85 @@
                             
                     classes: classes,
                     showClasses: true,
-                    cart:[], //array to store items in shopping cart
-    
-                    
+                    cart:[], //array to store items in shopping cart                   
+            },
+
+            methods:{
+                addToCart: function(classItem) {
+                    // Check if adding to cart is possible
+                    if (this.canAddToCart(classItem)) {
+                        this.cart.push(classItem);
+                    classItem.Availability -= 1;
+                    }
+                },
+                canAddToCart: function(classItem) {
+                // checking available items minus cart count is greater than 0
+                return classItem.Availability - this.cartCount(classItem.id) > 0;
+                },
+
+                cartCount(id) {
+                return this.cart.filter(item => item === id).length; // storing objects, adjust accordingly
+                },
+
+                // cartCount(id) {
+                // // Count how many of this item are in the cart
+                // return this.cart.filter(item => item.id === id).length;
+                // },
+
+                showCheckout(){
+                            this.showClasses = !this.showClasses ? false: true;
+                            
+                        },
+                toggleCheckout() {
+                            this.showClasses = !this.showClasses;
+                },
+                goHome() {
+                            this.showClasses = true;
+                         },
+
+                submitOrder() {alert('Order submitted!');
+                               this.cart = [];  // Clear cart after order submission
+                                this.classes.forEach((classItem) => {
+                                classItem.Availability = 5; 
+                                });
+                    },
+
+                sortedClasses() {
+                            return this.classes.slice().sort((a, b) => {
+                            let modifier = this.sortOrder === 'asc' ? 1 : -1;
+
+                            if (this.sortOption === 'Price' || this.sortOption === 'Availability') {
+                            // For numeric sorting
+                            return (a[this.sortOption] - b[this.sortOption]) * modifier;
+                            } else if (this.sortOption === 'Subject') {
+                            // alphabet sorting
+                            return a.Subject.localeCompare(b.Subject) * modifier;
+                            } else {
+                            // string
+                            let propA = String(a[this.sortOption]).toLowerCase();
+                            let propB = String(b[this.sortOption]).toLowerCase();
+
+                            return propA > propB ? modifier : -modifier;
+                            }
+                            });
+                        },
+
+                            toggleSortOrder() {
+                            this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+                             },
+
+                            removeFromCart: function(item) {
+                                const index = this.cart.indexOf(item);
+                                if (index > -1) {
+                                this.cart.splice(index, 1);
+                                // Find the original classItem and increase availability
+                                const classItem = this.classes.find(c => c.id === item.id);
+                                if (classItem) {
+                                classItem.Availability += 1;
+                            }
+                        }
+                    },
+
             },
         });
         </script>
