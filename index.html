@@ -79,6 +79,22 @@
                     <div class="checkout-page">
                         <h2>Checkout Page</h2>
                     </div>
+
+                    <!--Cart Items-->
+                    <div class="cart" v-if="cart.length > 0">
+                        <h2><span class="fa-solid fa-cart-plus"></span> Your Cart</h2>
+                        <ul>
+                            <li v-for="item in cart" :key="item.id">
+                               {{ item.Subject }} - ${{ item.Price }}
+                                <button v-on:click="removeFromCart(item)">🗑️</button>
+                            </li>
+                        </ul>
+                        <p><strong>Total: </strong>${{ totalPrice }}</p>
+                    </div>
+                    <div v-else>
+                        <p>No items in cart</p>
+                    </div>
+
                     <div class="checkout-form">
                         <h2>Checkout Form</h2>
                         <p>
