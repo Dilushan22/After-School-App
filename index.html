@@ -25,7 +25,7 @@
                 </div>
             </header>
             <main>
-                <div v-if="products">
+                <div v-if="showClasses">
                     <h1>Afterschool Learning Assistance</h1>
                     <!-- Sorting Options -->
                 <div class="sort-box">
@@ -41,23 +41,33 @@
                     </button>
                 </div>
 
-                <!--class items being displayed-->
-            <div v-for="classItem in filteredClasses" :key="classItem.id" class="class-box">
-                <figure>
-                    <img v-bind:src="classItem.image" v-bind:style="{ width: '200px', height: 'auto' }">
-                </figure>
-                <h2>{{ classItem.Subject }}</h2>
-                <p>Subject: {{ classItem.Subject }}</p>
-                <p>Price: ${{ classItem.Price }}</p>
-                <p>Availability: {{ classItem.Availability}}</p>
-                <p>Location: {{ classItem.Location }}</p>
+                            <!--class items being displayed-->
+                    <div v-for="classItem in filteredClasses" :key="classItem.id" class="class-box">
+                            <figure>
+                                <img v-bind:src="classItem.image" v-bind:style="{ width: '200px', height: 'auto' }">
+                            </figure>
+                        <h2>{{ classItem.Subject }}</h2>
+                        <p>Subject: {{ classItem.Subject }}</p>
+                        <p>Price: ${{ classItem.Price }}</p>
+                        <p>Availability: {{ classItem.Availability}}</p>
+                        <p>Location: {{ classItem.Location }}</p>
 
+                        <div>
+                            <!-- Full star on whole number... -->
+                            <span v-for="n in Math.floor(classItem.rating)" :key="`full-${n}`"><i class="fa-solid fa-star"></i></span>
+                            
+                            <!-- Half star on 0.5 -->
+                            <span v-if="classItem.rating % 1 !== 0" :key="`half-star`"><i class="fa-regular fa-star-half-stroke"></i></span>
+                            
+                            <!-- Empty stars -->
+                            <span v-for="n in 5 - Math.ceil(classItem.rating)" :key="`empty-${n}`"><i class="fa-regular fa-star"></i></span>
+                        </div>
 
-                <button v-on:click="addToCart(classItem)" v-if="canAddToCart(classItem)">Add to Cart</button>
-                <button disabled v-else>No Availability</button>
+                        <button v-on:click="addToCart(classItem)" v-if="canAddToCart(classItem)">Add to Cart</button>
+                        <button disabled v-else>No Availability</button>
             
 
-          </div>  
+                    </div>  
 
                 </div>
             </main>
