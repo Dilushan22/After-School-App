@@ -266,7 +266,49 @@
                         }
                     },
 
+            },  
+
+            computed:{//the computed property object
+                        cartItemCount:function(){// the propoerty name 
+                                        // its value is calculated when it is called
+                                        return this.cart.length || 0;
+                        },
+                        isCartEmpty(){
+                                return this.cart.length === 0;
+                        },
+
+                        // canAddToCart: function(){
+                        //     return this.classItem.Availability > 0;
+                        // },
+
+                       itemsLeft(classItem) {
+                       return classItem.Availability - this.cartCount(classItem.id);
+                    },
+
+                    totalPrice() {
+                    return this.cart.reduce((total, item) => total + item.Price, 0);
+                    },
+
+                    filteredClasses() {
+                    // search query
+                            return this.sortedClasses().filter(classItem => {
+                                const query = this.searchQuery.toLowerCase();
+                    // Match against each attribute you want to search within
+                            return (
+                                classItem.Subject.toLowerCase().includes(query) ||
+                                classItem.Location.toLowerCase().includes(query) ||
+                                classItem.Price.toString().includes(query) ||
+                                classItem.Availability.toString().includes(query)
+                                    );
+                                });
+                            },
+
+                //     toggleSortOrder() {
+                //     this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+                // },
+
             },
+
         });
         </script>
     </body>
