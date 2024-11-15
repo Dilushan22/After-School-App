@@ -41,6 +41,10 @@
                     </button>
                 </div>
 
+                <div class="search-bar">
+                    <input type="text" v-model="searchQuery" placeholder="Search..">
+                </div>
+
                             <!--class items being displayed-->
                     <div v-for="classItem in filteredClasses" :key="classItem.id" class="class-box">
                             <figure>
