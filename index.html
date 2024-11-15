@@ -41,6 +41,24 @@
                     </button>
                 </div>
 
+                <!--class items being displayed-->
+            <div v-for="classItem in filteredClasses" :key="classItem.id" class="class-box">
+                <figure>
+                    <img v-bind:src="classItem.image" v-bind:style="{ width: '200px', height: 'auto' }">
+                </figure>
+                <h2>{{ classItem.Subject }}</h2>
+                <p>Subject: {{ classItem.Subject }}</p>
+                <p>Price: ${{ classItem.Price }}</p>
+                <p>Availability: {{ classItem.Availability}}</p>
+                <p>Location: {{ classItem.Location }}</p>
+
+
+                <button v-on:click="addToCart(classItem)" v-if="canAddToCart(classItem)">Add to Cart</button>
+                <button disabled v-else>No Availability</button>
+            
+
+          </div>  
+
                 </div>
             </main>
          </div>
