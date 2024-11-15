@@ -25,7 +25,7 @@
                 </div>
             </header>
             <main>
-                <div v-if="showClasses">
+                <div v-if="products">
                     <h1>Afterschool Learning Assistance</h1>
                     <!-- Sorting Options -->
                 <div class="sort-box">
@@ -44,5 +44,40 @@
                 </div>
             </main>
          </div>
+
+         <script type="text/javascript">
+            let app = new Vue({
+                el: '#app',
+                data: {
+                    logo:"images/logo.jpg",
+                    sitename:"London Tendrils International School",
+                    sortOption: 'subject',
+                    sortOrder: 'asc',
+                    searchQuery: '', 
+                    order: {
+                        firstName: '',
+                        lastName: '',
+                        address: '',
+                        city: '',
+                        zip: '',
+                        state: '',
+                        gift: false,
+                        method: 'Home',
+                    },
+                    states: {
+                                DU: 'Dubai',
+                                SH: 'Sharjah',
+                                AJ: 'Ajman',
+                                AB: 'Abu Dhabi'
+                            },
+                            
+                    classes: classes,
+                    showClasses: true,
+                    cart:[], //array to store items in shopping cart
+    
+                    
+            },
+        });
+        </script>
     </body>
 </html>
