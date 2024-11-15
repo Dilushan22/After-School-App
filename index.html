@@ -10,6 +10,39 @@
     </head>
 
     <body>
-         
+         <div id="app">
+            <header>
+                <img v-bind:src="logo" v-bind:style="{ width: '150px', height: 'auto' }">
+                <h1 v-text="sitename"></h1>
+                <button v-on:click="toggleCheckout" :disabled="isCartEmpty">{{ cartItemCount }} 
+                        <span class="fa-solid fa-cart-plus"></span>
+                                checkout
+                </button>
+                <div class="home-button">
+                    <button v-on:click="goHome" v-if="!showClasses">
+                        <span class="fa-solid fa-house-user"></span>
+                        Home</button>
+                </div>
+            </header>
+            <main>
+                <div v-if="showClasses">
+                    <h1>Afterschool Learning Assistance</h1>
+                    <!-- Sorting Options -->
+                <div class="sort-box">
+                    <label for="sortBy">Sort by: </label>
+                    <select v-model="sortOption">
+                        <option value="Subject">Subject</option>
+                        <option value="Location">Location</option>
+                        <option value="Price">Price</option>
+                        <option value="Availability">Availability</option>
+                    </select>
+                    <button v-on:click="toggleSortOrder">
+                        {{ sortOrder === 'asc' ? 'Ascending' : 'Descending' }}
+                    </button>
+                </div>
+
+                </div>
+            </main>
+         </div>
     </body>
 </html>
