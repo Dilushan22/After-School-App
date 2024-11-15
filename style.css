@@ -1,0 +1,204 @@
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    background-color: #70f0c9; 
+    border: 1px solid #ccc; 
+    border-radius: 10px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    margin: 20px; 
+    margin-right: 12px;
+    
+}
+header img {
+    margin-right: 15px;
+}
+header h1 {
+    margin: 0;
+    font-size: 40px;
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif 
+}
+header button {
+    background-color:#2786eb;
+    color: white; 
+    border:black; 
+    padding: 10px 20px; 
+    border-radius: 10px; 
+    cursor: pointer; 
+    font-size: 16px; 
+    transition: background-color 0.3s ease; 
+}
+
+header button:hover {
+    background-color: #0056b3; 
+}
+main h1 {
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    background-color: #70f0c9;
+    border: 1px solid #ccc; 
+    border-radius: 10px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    margin: 15px; 
+    font-size: 30px;
+    font-family:'Times New Roman', Times, serif;
+}
+body {
+    background-color: #0c1f22;
+    color: #333; 
+    font-family: Arial, sans-serif; 
+    margin: 0; 
+    padding: 0; 
+    display: flex;             /* Use flex to center elements */
+    justify-content: center;   /* Center the boxes horizontally */
+    padding: 0 20px;           /* Add padding on left and right for spacing */
+    flex-wrap: wrap;           /* Allow boxes to wrap to the next line */
+    gap: 15px;                   /* Space between boxes */
+    min-height: 100vh;           /* Ensure full height for the body */
+    align-items: start;          /* Align items at the top */
+}
+.class-box {
+    border: 1px solid #ccc; /* Light gray border */
+    border-radius: 8px;     /* Rounded corners */
+    padding: 15px;          /* Inner spacing */
+    margin: 15px;           /* Space between boxes */
+    background-color: #f9f9f9; /* Light background color */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    display: inline-block;  /* Allow multiple boxes in a row */
+    justify-content: space-between; /* Ensure the content fills the space */
+    width: 250px;           /* Fixed width for each box */
+    height: 475px;          /* Set a fixed height */
+    vertical-align:top;    /* Align boxes at the top */
+    text-align: center;     /* Center the content */
+}
+
+.class-box figure {
+    margin: 0;              /* Remove default margin from figure */
+}
+
+.class-box img {
+    border-radius: 5px;     /* Rounded image corners */
+    width: 100%;            /* Make image responsive */
+    height: auto;           /* Maintain aspect ratio */
+}
+
+.class-box button {
+    background-color: #007bff; /* Blue button */
+    color: white;              /* White text */
+    border: none;              /* Remove border */
+    padding: 8px 15px;         /* Add padding */
+    border-radius: 5px;        /* Rounded corners */
+    cursor: pointer;           /* Pointer cursor */
+    margin-top: 10px;          /* Space above the button */
+}
+
+.class-box button:disabled {
+    background-color: #cccccc; /* Gray color when disabled */
+    cursor: not-allowed;       /* Show not-allowed cursor */
+}
+
+body {
+    display: flex;                   /* Use flexbox layout for the body */
+    flex-wrap: wrap;                /* Allow elements to wrap to the next line */
+    justify-content: flex-start;    /* Align elements starting from the left */
+    align-items: flex-start;        /* Align items at the top */
+    gap: 20px;                      /* Space between .class-box items and .cart */
+    padding: 20px;                  /* Padding around the container */
+}
+.checkout-page h2{
+    font-size: 50px;
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    color: #f9f9f9;
+    text-align: center;
+}
+
+.cart {
+    border: 1px solid #ccc;        /* Light gray border */
+    border-radius: 10px;           /* Rounded corners */
+    padding: 20px;                 /* Inner spacing */
+    background-color: #70f0c9;    /* Light background color */
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    max-width: 300px;              /* Limit the width of the cart */
+    margin: 20px auto;             /* Center the cart horizontally */
+    text-align: left;              /* Align text to the left */
+}
+
+.cart h2 {
+    font-size: 1.5em;              /* Increase the font size for the heading */
+    margin-bottom: 15px;           /* Space below the heading */
+    color: #000000;                   /* Darker color for contrast */
+}
+
+.cart ul {
+    list-style: none;              /* Remove default list styling */
+    padding: 0;                    /* Remove padding */
+    margin: 0;                     /* Remove margin */
+}
+
+.cart li {
+    padding: 10px 0;               /* Add spacing between items */
+    border-bottom: 1px solid #eee; /* Light border between items */
+}
+
+.cart li:last-child {
+    border-bottom: none;           /* Remove border for the last item */
+}
+.cart v-else {
+    font-size: 1.5em;              /* Increase the font size for the heading */
+    margin-bottom: 15px;           /* Space below the heading */
+    color: #ffffff; 
+}
+/* Style the sort box */
+.sort-box {
+    border: 2px solid #000000; /* Add a light border */
+    padding: 10px; /* Add some padding inside the box */
+    background-color: #70f0c9; /* Light background color */
+    width: 245px; /* Set a fixed width for the box */
+    border-radius: 10px; /* Rounded corners */
+    margin-bottom: 30px; /* Space between sort box and classes */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    font-family: Arial, sans-serif; 
+    margin-left: 12px;
+}
+
+.checkout-form {
+    background-color: #f9f9f9; /* Light gray background */
+    border: 1px solid #ccc; /* Gray border */
+    border-radius: 10px; /* Rounded corners */
+    padding: 20px; /* Padding inside the box */
+    margin: 20px 0; /* Margin around the box */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    margin-left: 50px;
+}
+
+.checkout-form p {
+    margin-bottom: 20px; /* Space between form elements */
+}
+
+.checkout-form strong {
+    display: inline-block; /* Align labels properly */
+    width: auto; /* Set a fixed width for labels */
+}
+.order-information{
+    background-color: #f9f9f9; /* Light gray background */
+    border: 1px solid #ccc; /* Gray border */
+    border-radius: 10px; /* Rounded corners */
+    padding: 20px; /* Padding inside the box */
+    margin: 20px 0; /* Margin around the box */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    margin-top: 10px;
+    margin-left: 50px;
+}
+
+.order-information{
+    margin-bottom: 15px; /* Space between form elements */
+}
+
+.order-information{
+    display: inline-block; /* Align labels properly */
+    width: auto; /* Set a fixed width for labels */
+}
+
