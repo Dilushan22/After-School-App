@@ -82,16 +82,26 @@
                         </div>
 
                         <!--Cart Items-->
-                    <div class="cart" v-if="cart.length > 0">
-                        <h2><span class="fa-solid fa-cart-plus"></span> Your Cart</h2>
-                        <ul>
-                            <li v-for="item in cart" :key="item.id">
-                               {{ item.Subject }} - ${{ item.Price }}
-                                <button v-on:click="removeFromCart(item)">🗑️</button>
-                            </li>
-                        </ul>
-                        <p><strong>Total: </strong>${{ totalPrice }}</p>
-                    </div>
+                        <div class="cart" v-if="cart.length > 0">
+                            <h2><span class="fa-solid fa-cart-plus"></span> Your Cart</h2>
+                            <ul>
+                                <li v-for="item in cart" :key="item.id" class="cart-item">
+                                    <div class="cart-item-details">
+                                        <figure>
+                                            <img v-bind:src="item.image" alt="Class Image" v-bind:style="{ width: '100px', height: 'auto' }">
+                                        </figure>
+                                        <div class="cart-item-info">
+                                            <h3>{{ item.Subject }}</h3>
+                                            <p>Location: {{ item.Location }}</p>
+                                            <p>Price: ${{ item.Price }}</p>
+                                            <p>Availability: {{ item.Availability }}</p>
+                                        </div>
+                                    </div>
+                                    <button v-on:click="removeFromCart(item)">🗑️ Remove</button>
+                                </li>
+                            </ul>
+                            <p><strong>Total: </strong>${{ totalPrice }}</p>
+                        </div>
                     <div v-else>
                         <p>No items in cart</p>
                     </div>
