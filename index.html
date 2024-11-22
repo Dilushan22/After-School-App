@@ -165,7 +165,7 @@
                         <p>Gift? {{ order.gift }}</p>
                         <p>Method: {{ order.method }}</p>
                 </div>
-                        <button v-on:click="submitOrder">Place Order</button>
+                        <button v-on:click="submitOrder" :disabled="!formIsValid">Place Order</button>
                     </div>
             </div>
         </main>
@@ -322,6 +322,18 @@
                 //     toggleSortOrder() {
                 //     this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
                 // },
+                formIsValid() {
+                    // Check if all fields are filled
+                    return (
+                        this.order.firstName.trim() &&
+                        this.order.lastName.trim() &&
+                        this.order.address.trim() &&
+                        this.order.city.trim() &&
+                        this.order.zip &&
+                        this.order.state &&
+                        this.order.Number.trim()
+                        );
+                    },
 
             },
         });
