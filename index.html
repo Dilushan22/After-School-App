@@ -43,7 +43,22 @@
                 </div>
 
                 <div class="search-bar">
-                    <input type="text" v-model="searchQuery" placeholder="Search..">
+                    <input 
+                        type="text" 
+                        v-model="searchQuery" 
+                        placeholder="Search..." 
+                        @focus="showDropdown = true" 
+                        @blur="hideDropdownWithDelay"
+                    >
+                    <ul v-if="showDropdown" class="dropdown">
+                        <li 
+                            v-for="classItem in filteredClasses" 
+                            :key="classItem.id" 
+                            @click="selectFromDropdown(classItem.Subject)"
+                        >
+                            {{ classItem.Subject }}
+                        </li>
+                    </ul>
                 </div>
 
                 <!--class items being displayed-->
@@ -68,11 +83,12 @@
                         <span v-for="n in 5 - Math.ceil(classItem.rating)" :key="`empty-${n}`"><i class="fa-regular fa-star"></i></span>
                     </div>
 
-                    <button v-on:click="addToCart(classItem)" v-if="canAddToCart(classItem)">Add to Cart</button>
-                    <button disabled v-else>No Availability</button>
-                
-
-              </div>    
+                    <button v-on:click="addToCart(classItem)" v-if="classItem.Availability > 4">BUY NOW</button>
+                    <button v-on:click="addToCart(classItem)" v-else-if="classItem.Availability > 0">
+                            {{ availabilityMessage(classItem.Availability) }}
+                    </button>
+                    <button disabled v-else>NO STOCK</button>
+            </div>    
             </div>
 
                     <!-- Checkout Form being displayed-->
@@ -182,6 +198,7 @@
                 sortOption: 'subject',
                 sortOrder: 'asc',
                 searchQuery: '', 
+                showDropdown: false,
                 order: {
                     firstName: '',
                     lastName: '',
@@ -217,6 +234,20 @@
                 canAddToCart: function(classItem) {
                 // checking available items minus cart count is greater than 0
                 return classItem.Availability - this.cartCount(classItem.id) > 0;
+                },
+
+                availabilityMessage(availability) {
+                    if (availability === 4) {
+                        return '4 left';
+                    } else if (availability === 3) {
+                        return '3 left';
+                    } else if (availability === 2) {
+                        return '2 left';
+                    } else if (availability === 1) {
+                        return '1 left';
+                    } else {
+                        return 'No stock';
+                    }
                 },
 
                 cartCount(id) {
@@ -282,6 +313,17 @@
                         }
                     },
 
+                            hideDropdownWithDelay() {
+                                // Add a delay to allow selecting from dropdown before hiding it.
+                                setTimeout(() => {
+                                this.showDropdown = false;
+                                }, 200);
+                        },
+                            selectFromDropdown(selectedItem) {
+                                // Set the search query to the selected item and hide dropdown.
+                                this.searchQuery = selectedItem;
+                                this.showDropdown = false;
+                        }
             },
 
             computed:{//the computed property object
@@ -306,18 +348,33 @@
                     },
 
                     filteredClasses() {
-                    // search query
-                            return this.sortedClasses().filter(classItem => {
-                                const query = this.searchQuery.toLowerCase();
-                    // Match against each attribute you want to search within
-                            return (
-                                classItem.Subject.toLowerCase().includes(query) ||
-                                classItem.Location.toLowerCase().includes(query) ||
-                                classItem.Price.toString().includes(query) ||
-                                classItem.Availability.toString().includes(query)
-                                    );
-                                });
-                            },
+                        const query = this.searchQuery.toLowerCase();
+
+                    if (!query) {
+                            return this.sortedClasses(); // Show all items if no query is entered.
+                        }
+
+                            const filtered = this.classes.filter(classItem =>
+                        classItem.Subject.toLowerCase().includes(query)
+                        );
+
+                        // Prioritize items that start with the query.
+                        const prioritized = filtered.sort((a, b) => {
+                        const aStartsWithQuery = a.Subject.toLowerCase().startsWith(query);
+                        const bStartsWithQuery = b.Subject.toLowerCase().startsWith(query);
+
+                        // If both or neither start with the query, sort alphabetically.
+                        if (aStartsWithQuery === bStartsWithQuery) {
+                        return a.Subject.localeCompare(b.Subject);
+                        }
+
+                        // Items starting with the query come first.
+                        return aStartsWithQuery ? -1 : 1;
+                        });
+
+                        return prioritized;
+                    },
+
 
                 //     toggleSortOrder() {
                 //     this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
