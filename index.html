@@ -19,13 +19,13 @@
                         checkout
                 </button>
             <div class="home-button">
-                <button v-on:click="goHome" v-if="!showClasses">
+                <button v-on:click="goHome" v-if="!showProducts">
                     <span class="fa-solid fa-house-user"></span>
                     Home</button>
             </div>
         </header>
         <main>
-            <div v-if="showClasses">
+            <div v-if="showProducts">
                 <h1>Afterschool Learning Assistance</h1>
 
                 <!-- Sorting Options -->
@@ -52,121 +52,124 @@
                     >
                     <ul v-if="showDropdown" class="dropdown">
                         <li 
-                            v-for="classItem in filteredClasses" 
-                            :key="classItem.id" 
-                            @click="selectFromDropdown(classItem.Subject)"
+                            v-for="product in filteredProducts" 
+                            :key="product.id" 
+                            @click="selectFromDropdown(product.Subject)"
+                            @mouseover="highlightItem(product)"
+                            :class="{'highlighted': selectedItem === product.Subject}"
+                            @click="selectFromDropdown(product.Subject)"
                         >
-                            {{ classItem.Subject }}
+                            {{ product.Subject }}
                         </li>
                     </ul>
                 </div>
 
-                <!--class items being displayed-->
-            <div v-for="classItem in filteredClasses" :key="classItem.id" class="class-box">
+                <!-- Product items being displayed -->
+                <div v-for="product in filteredProducts" :key="product.id" class="product-box">
                     <figure>
-                        <img v-bind:src="classItem.image" v-bind:style="{ width: '200px', height: 'auto' }">
+                        <img v-bind:src="product.image" v-bind:style="{ width: '200px', height: 'auto' }">
                     </figure>
-                    <h2>{{ classItem.Subject }}</h2>
-                    <p>Subject: {{ classItem.Subject }}</p>
-                    <p>Price: ${{ classItem.Price }}</p>
-                    <p>Availability: {{ classItem.Availability}}</p>
-                    <p>Location: {{ classItem.Location }}</p>
+                    <h2>{{ product.Subject }}</h2>
+                    <p>Subject: {{ product.Subject }}</p>
+                    <p>Price: ${{ product.Price }}</p>
+                    <p>Availability: {{ product.Availability }}</p>
+                    <p>Location: {{ product.Location }}</p>
 
                     <div>
                         <!-- Full star on whole number... -->
-                        <span v-for="n in Math.floor(classItem.rating)" :key="`full-${n}`"><i class="fa-solid fa-star"></i></span>
+                        <span v-for="n in Math.floor(product.rating)" :key="`full-${n}`"><i class="fa-solid fa-star"></i></span>
                         
                         <!-- Half star on 0.5 -->
-                        <span v-if="classItem.rating % 1 !== 0" :key="`half-star`"><i class="fa-regular fa-star-half-stroke"></i></span>
+                        <span v-if="product.rating % 1 !== 0" :key="`half-star`"><i class="fa-regular fa-star-half-stroke"></i></span>
                         
                         <!-- Empty stars -->
-                        <span v-for="n in 5 - Math.ceil(classItem.rating)" :key="`empty-${n}`"><i class="fa-regular fa-star"></i></span>
+                        <span v-for="n in 5 - Math.ceil(product.rating)" :key="`empty-${n}`"><i class="fa-regular fa-star"></i></span>
                     </div>
 
-                    <button v-on:click="addToCart(classItem)" v-if="classItem.Availability > 4">BUY NOW</button>
-                    <button v-on:click="addToCart(classItem)" v-else-if="classItem.Availability > 0">
-                            {{ availabilityMessage(classItem.Availability) }}
+                    <button v-on:click="addToCart(product)" v-if="product.Availability > 4">BUY NOW</button>
+                    <button v-on:click="addToCart(product)" v-else-if="product.Availability > 0">
+                            {{ availabilityMessage(product.Availability) }}
                     </button>
                     <button disabled v-else>NO STOCK</button>
-            </div>    
+                </div>    
             </div>
 
-                    <!-- Checkout Form being displayed-->
-                    <div v-else>
-                        <div class="checkout-page">
-                            <h2>Checkout Page</h2>
-                        </div>
+            <!-- Checkout Form being displayed -->
+            <div v-else>
+                <div class="checkout-page">
+                    <h2>Checkout Page</h2>
+                </div>
 
-                        <!--Cart Items-->
-                        <div class="cart" v-if="cart.length > 0">
-                            <h2><span class="fa-solid fa-cart-plus"></span> Your Cart</h2>
-                            <ul>
-                                <li v-for="item in cart" :key="item.id" class="cart-item">
-                                    <div class="cart-item-details">
-                                        <figure>
-                                            <img v-bind:src="item.image" alt="Class Image" v-bind:style="{ width: '100px', height: 'auto' }">
-                                        </figure>
-                                        <div class="cart-item-info">
-                                            <h3>{{ item.Subject }}</h3>
-                                            <p>Location: {{ item.Location }}</p>
-                                            <p>Price: ${{ item.Price }}</p>
-                                            <p>Availability: {{ item.Availability }}</p>
-                                        </div>
-                                    </div>
-                                    <button v-on:click="removeFromCart(item)">🗑️ Remove</button>
-                                </li>
-                            </ul>
-                            <p><strong>Total: </strong>${{ totalPrice }}</p>
-                        </div>
-                    <div v-else>
-                        <p>No items in cart</p>
-                    </div>
+                <!--Cart Items-->
+                <div class="cart" v-if="cart.length > 0">
+                    <h2><span class="fa-solid fa-cart-plus"></span> Your Cart</h2>
+                    <ul>
+                        <li v-for="item in cart" :key="item.id" class="cart-item">
+                            <div class="cart-item-details">
+                                <figure>
+                                    <img v-bind:src="item.image" alt="Product Image" v-bind:style="{ width: '100px', height: 'auto' }">
+                                </figure>
+                                <div class="cart-item-info">
+                                    <h3>{{ item.Subject }}</h3>
+                                    <p>Location: {{ item.Location }}</p>
+                                    <p>Price: ${{ item.Price }}</p>
+                                    <p>Availability: {{ item.Availability }}</p>
+                                </div>
+                            </div>
+                            <button v-on:click="removeFromCart(item)">🗑️ Remove</button>
+                        </li>
+                    </ul>
+                    <p><strong>Total: </strong>${{ totalPrice }}</p>
+                </div>
+                <div v-else>
+                    <p>No items in cart</p>
+                </div>
 
-                    <div class="checkout-form">
-                        <h2>Checkout Form</h2>
-                        <p>
-                          <strong>First Name:</strong>
-                          <input v-model.trim="order.firstName"/>
-                        </p>
-                        <p>
-                          <strong>Last Name:</strong>
-                          <input v-model="order.lastName"/>
-                        </p>
-                        <p>
-                          <strong>Number:</strong>
-                          <input v-model="order.Number" type="text" maxlength="13" @input="order.Number = order.Number.replace(/[^0-9+]/g, '')" />
-                        </p>
-                        <p>
-                          <strong>Address:</strong>
-                          <input v-model="order.address"/>
-                        </p>
-                        <p>
-                          <strong>City:</strong>
-                          <input v-model="order.city"/>
-                        </p>
-                        <p>
-                          <strong>State:</strong>
-                          <select v-model="order.state">
-                            <option disabled value="">State</option>
-                            <option v-for="(state, key) in states" :value="state">{{ key }}</option>
-                          </select>
-                        </p>
-                        <p>
-                          <strong>Zip/Postal Code:</strong>
-                          <input v-model.number="order.zip" type="number"/>
-                        </p>
-                        <p>
-                          <input type="checkbox" id="gift" v-model="order.gift">
-                          <label for="gift">Ship as Gift?</label>
-                        </p>
-                        <p>
-                          <input type="radio" id="home" value="Home" v-model="order.method">
-                          <label for="home">Home</label>
-                        </p>
-                        <p>
-                          <input type="radio" id="business" value="Business" v-model="order.method">
-                          <label for="business">Business</label>
-                        </p>
+                <div class="checkout-form">
+                    <h2>Checkout Form</h2>
+                    <p>
+                      <strong>First Name:</strong>
+                      <input v-model.trim="order.firstName"/>
+                    </p>
+                    <p>
+                      <strong>Last Name:</strong>
+                      <input v-model="order.lastName"/>
+                    </p>
+                    <p>
+                      <strong>Number:</strong>
+                      <input v-model="order.Number" type="text" maxlength="13" @input="order.Number = order.Number.replace(/[^0-9+]/g, '')" />
+                    </p>
+                    <p>
+                      <strong>Address:</strong>
+                      <input v-model="order.address"/>
+                    </p>
+                    <p>
+                      <strong>City:</strong>
+                      <input v-model="order.city"/>
+                    </p>
+                    <p>
+                      <strong>State:</strong>
+                      <select v-model="order.state">
+                        <option disabled value="">State</option>
+                        <option v-for="(state, key) in states" :value="state">{{ key }}</option>
+                      </select>
+                    </p>
+                    <p>
+                      <strong>Zip/Postal Code:</strong>
+                      <input v-model.number="order.zip" type="number"/>
+                    </p>
+                    <p>
+                      <input type="checkbox" id="gift" v-model="order.gift">
+                      <label for="gift">Ship as Gift?</label>
+                    </p>
+                    <p>
+                      <input type="radio" id="home" value="Home" v-model="order.method">
+                      <label for="home">Home</label>
+                    </p>
+                    <p>
+                      <input type="radio" id="business" value="Business" v-model="order.method">
+                      <label for="business">Business</label>
+                    </p>
 
                 </div>
                 <div class="order-information">
@@ -182,23 +185,24 @@
                         <p>Method: {{ order.method }}</p>
                 </div>
                         <button v-on:click="submitOrder" :disabled="!formIsValid">Place Order</button>
-                    </div>
             </div>
+        </div>
         </main>
     </div>
 
-    <script src="classes.js"></script>
+    <script src="products.js"></script>
 
     <script type="text/javascript">
         let app = new Vue({
             el: '#app',
             data: {
-                logo:"images/logo.jpg",
-                sitename:"London Tendrils International School",
-                sortOption: 'subject',
+                logo: "images/logo.jpg",
+                sitename: "London Tendrils International School",
+                sortOption: 'Subject',
                 sortOrder: 'asc',
-                searchQuery: '', 
+                searchQuery: '',
                 showDropdown: false,
+                
                 order: {
                     firstName: '',
                     lastName: '',
@@ -208,32 +212,32 @@
                     state: '',
                     gift: false,
                     method: 'Home',
+                    Number: ''
                 },
                 states: {
-                            DU: 'Dubai',
-                            SH: 'Sharjah',
-                            AJ: 'Ajman',
-                            AB: 'Abu Dhabi'
-                        },
-                        
-                classes: classes,
-                showClasses: true,
-                cart:[], //array to store items in shopping cart
+                    DU: 'Dubai',
+                    SH: 'Sharjah',
+                    AJ: 'Ajman',
+                    AB: 'Abu Dhabi'
+                },
+                products: products,
+                showProducts: true,
+                cart: [],//array to store items in shopping cart
+            },
 
-                
-        },
-        
-            methods:{
-                addToCart: function(classItem) {
+
+
+
+            methods: {
+                addToCart(product) {
                     // Check if adding to cart is possible
-                    if (this.canAddToCart(classItem)) {
-                        this.cart.push(classItem);
-                    classItem.Availability -= 1;
+                    if (this.canAddToCart(product)) {
+                        this.cart.push(product);
+                        product.Availability -= 1;
                     }
                 },
-                canAddToCart: function(classItem) {
-                // checking available items minus cart count is greater than 0
-                return classItem.Availability - this.cartCount(classItem.id) > 0;
+                canAddToCart(product) {
+                    return product.Availability > 0; // Allow adding to the cart if availability is greater than 0
                 },
 
                 availabilityMessage(availability) {
@@ -251,37 +255,29 @@
                 },
 
                 cartCount(id) {
-                return this.cart.filter(item => item === id).length; // storing objects, adjust accordingly
+                    return this.cart.filter(item => item.id === id).length;
                 },
 
-                // cartCount(id) {
-                // // Count how many of this item are in the cart
-                // return this.cart.filter(item => item.id === id).length;
-                // },
-
-                showCheckout(){
-                            this.showClasses = !this.showClasses ? false: true;
-                            
-                        },
                 toggleCheckout() {
-                            this.showClasses = !this.showClasses;
+                    this.showProducts = !this.showProducts;
                 },
+
                 goHome() {
-                            this.showClasses = true;
-                         },
+                    this.showProducts = true;
+                },
 
-                submitOrder() {alert('Order submitted!');
-                               this.cart = [];  // Clear cart after order submission
-                                this.classes.forEach((classItem) => {
-                                classItem.Availability = 5; 
-                                });
-                    },
+                submitOrder() {
+                    alert('Order submitted!');
+                    this.cart = []; // Clear cart after order submission
+                    this.products.forEach(product => {
+                        product.Availability = 10; // Reset to default stock
+                    });
+                },
 
-                sortedClasses() {
-                            return this.classes.slice().sort((a, b) => {
-                            let modifier = this.sortOrder === 'asc' ? 1 : -1;
-
-                            if (this.sortOption === 'Price' || this.sortOption === 'Availability') {
+                sortedProducts() {
+                    return this.products.slice().sort((a, b) => {
+                        let modifier = this.sortOrder === 'asc' ? 1 : -1;
+                        if (this.sortOption === 'Price' || this.sortOption === 'Availability') {
                             // For numeric sorting
                             return (a[this.sortOption] - b[this.sortOption]) * modifier;
                             } else if (this.sortOption === 'Subject') {
@@ -294,93 +290,86 @@
 
                             return propA > propB ? modifier : -modifier;
                             }
-                            });
-                        },
+                    });
+                },
 
-                            toggleSortOrder() {
-                            this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
-                             },
+                toggleSortOrder() {
+                    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+                },
 
-                            removeFromCart: function(item) {
-                                const index = this.cart.indexOf(item);
-                                if (index > -1) {
-                                this.cart.splice(index, 1);
-                                // Find the original classItem and increase availability
-                                const classItem = this.classes.find(c => c.id === item.id);
-                                if (classItem) {
-                                classItem.Availability += 1;
-                            }
-                        }
-                    },
+                removeFromCart(item) {
+                    const index = this.cart.indexOf(item);
+                    if (index > -1) {
+                        this.cart.splice(index, 1);
+                        // Find the original classItem and increase availability
+                        const product = this.products.find(p => p.id === item.id);
+                        if (product) product.Availability += 1;
+                    }
+                },
 
-                            hideDropdownWithDelay() {
-                                // Add a delay to allow selecting from dropdown before hiding it.
-                                setTimeout(() => {
-                                this.showDropdown = false;
-                                }, 200);
-                        },
-                            selectFromDropdown(selectedItem) {
-                                // Set the search query to the selected item and hide dropdown.
-                                this.searchQuery = selectedItem;
-                                this.showDropdown = false;
-                        }
+                hideDropdownWithDelay() {
+                    // Hide the dropdown with a delay to allow selecting an item before it disappears
+                    setTimeout(() => {
+                        this.showDropdown = false;
+                    }, 200);
+                },
+
+                selectFromDropdown(selectedItem) {
+                     // Set the search query to the selected item and hide dropdown.
+                    this.searchQuery = selectedItem;
+                    this.showDropdown = false;
+                },
+
+                highlightItem(product) {
+                this.selectedItem = product.Subject;  // Highlight the hovered item
+                }
+
             },
 
-            computed:{//the computed property object
-                        cartItemCount:function(){// the propoerty name 
-                                        // its value is calculated when it is called
-                                        return this.cart.length || 0;
-                        },
-                        isCartEmpty(){
-                                return this.cart.length === 0;
-                        },
+            computed: {
+                cartItemCount() {// the propoerty name 
+                    // its value is calculated when it is called
+                    return this.cart.length || 0;
+                },
 
-                        // canAddToCart: function(){
-                        //     return this.classItem.Availability > 0;
-                        // },
+                isCartEmpty() {
+                    return this.cart.length === 0;
+                },
 
-                       itemsLeft(classItem) {
-                       return classItem.Availability - this.cartCount(classItem.id);
-                    },
+                itemsLeft(product) {
+                    return product.Availability - this.cartCount(product.id);
+                },
 
-                    totalPrice() {
+                totalPrice() {
                     return this.cart.reduce((total, item) => total + item.Price, 0);
-                    },
+                },
 
-                    filteredClasses() {
-                        const query = this.searchQuery.toLowerCase();
+                filteredProducts() {
+                    const query = this.searchQuery.toLowerCase();
 
                     if (!query) {
-                            return this.sortedClasses(); // Show all items if no query is entered.
-                        }
+                        return this.sortedProducts(); 
+                    }
 
-                            const filtered = this.classes.filter(classItem =>
-                        classItem.Subject.toLowerCase().includes(query)
-                        );
+                    const filtered = this.products.filter(product =>
+                        product.Subject.toLowerCase().includes(query)
+                    );
 
-                        // Prioritize items that start with the query.
-                        const prioritized = filtered.sort((a, b) => {
+                    const prioritized = filtered.sort((a, b) => {
                         const aStartsWithQuery = a.Subject.toLowerCase().startsWith(query);
                         const bStartsWithQuery = b.Subject.toLowerCase().startsWith(query);
 
-                        // If both or neither start with the query, sort alphabetically.
                         if (aStartsWithQuery === bStartsWithQuery) {
-                        return a.Subject.localeCompare(b.Subject);
+                            return a.Subject.localeCompare(b.Subject);
                         }
 
-                        // Items starting with the query come first.
                         return aStartsWithQuery ? -1 : 1;
-                        });
+                    });
 
-                        return prioritized;
-                    },
+                    return prioritized;
+                },
 
-
-                //     toggleSortOrder() {
-                //     this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
-                // },
-                formIsValid() {
-                    // Check if all fields are filled
+                formIsValid() {// Check if all fields are filled
                     return (
                         this.order.firstName.trim() &&
                         this.order.lastName.trim() &&
@@ -389,10 +378,9 @@
                         this.order.zip &&
                         this.order.state &&
                         this.order.Number.trim()
-                        );
-                    },
-
-            },
+                    );
+                }
+            }
         });
     </script>
 </body>

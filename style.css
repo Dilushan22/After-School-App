@@ -60,7 +60,7 @@ body {
     min-height: 100vh;           /* Ensure full height for the body */
     align-items: start;          /* Align items at the top */
 }
-.class-box {
+.product-box {
     border: 1px solid #ccc; /* Light gray border */
     border-radius: 8px;     /* Rounded corners */
     padding: 15px;          /* Inner spacing */
@@ -75,17 +75,17 @@ body {
     text-align: center;     /* Center the content */
 }
 
-.class-box figure {
+.product-box figure {
     margin: 0;              /* Remove default margin from figure */
 }
 
-.class-box img {
+.product-box img {
     border-radius: 5px;     /* Rounded image corners */
     width: 100%;            /* Make image responsive */
     height: auto;           /* Maintain aspect ratio */
 }
 
-.class-box button {
+.product-box button {
     background-color: #007bff; /* Blue button */
     color: white;              /* White text */
     border: none;              /* Remove border */
@@ -95,7 +95,7 @@ body {
     margin-top: 10px;          /* Space above the button */
 }
 
-.class-box button:disabled {
+.product-box button:disabled {
     background-color: #cccccc; /* Gray color when disabled */
     cursor: not-allowed;       /* Show not-allowed cursor */
 }
@@ -204,6 +204,31 @@ body {
     width: auto; /* Set a fixed width for labels */
 }
 
+/* Search Bar Styling */
+.search-bar {
+   
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px; /* Space below the header */
+}
+
+.search-bar input {
+    padding: 10px;
+    width: 60%; /* Center input width and adjust as needed */
+    max-width: 400px; /* Limit the width of the input */
+    border: 2px solid #333; /* Border matching the header */
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333;
+    background-color: #fff;
+    transition: border-color 0.3s ease-in-out;
+}
+
+.search-bar input:focus {
+    outline: none;
+    border-color: #009688; /* Change border color when focused */
+}
+
 .dropdown {
     list-style: none;
     margin: 0;
@@ -226,3 +251,13 @@ body {
     background-color: #f0f0f0;
 }
 
+.highlighted {
+    background-color: #f0f0f0;  /* Highlighted item background */
+}
+
+/* Responsive design for smaller screens */
+@media screen and (max-width: 600px) {
+    .search-bar input {
+        width: 80%; /* Take up more space on smaller screens */
+    }
+}

@@ -1,4 +1,4 @@
-let classes=[
+let products=[
     {
        id: 1001,
        Subject: "Cricket",
