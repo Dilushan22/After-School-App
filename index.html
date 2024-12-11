@@ -9,7 +9,9 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="app">
+    <!-- vue app container -->
+    <div id="app"> 
+
         <header>
             <img v-bind:src="logo" v-bind:style="{ width: '150px', height: 'auto' }">
             <h1 v-text="sitename"></h1>
@@ -24,6 +26,7 @@
                     Home</button>
             </div>
         </header>
+
         <main>
             <div v-if="showProducts">
                 <h1>Afterschool Learning Assistance</h1>
@@ -42,6 +45,7 @@
                     </button>
                 </div>
 
+                <!-- search bar option -->
                 <div class="search-bar">
                     <input 
                         type="text" 
@@ -86,6 +90,7 @@
                         <span v-for="n in 5 - Math.ceil(product.rating)" :key="`empty-${n}`"><i class="fa-regular fa-star"></i></span>
                     </div>
 
+                    <!-- add to cart button option -->
                     <button v-on:click="addToCart(product)" v-if="product.Availability > 4">BUY NOW</button>
                     <button v-on:click="addToCart(product)" v-else-if="product.Availability > 0">
                             {{ availabilityMessage(product.Availability) }}
@@ -125,15 +130,18 @@
                     <p>No items in cart</p>
                 </div>
 
+                <!-- checkout form -->
                 <div class="checkout-form">
                     <h2>Checkout Form</h2>
                     <p>
                       <strong>First Name:</strong>
-                      <input v-model.trim="order.firstName"/>
+                      <input v-model.trim="order.firstName" 
+                         @input="order.firstName = order.firstName.replace(/[^a-zA-Z\s]/g, '')"/>
                     </p>
                     <p>
                       <strong>Last Name:</strong>
-                      <input v-model="order.lastName"/>
+                      <input v-model="order.lastName" 
+                         @input="order.lastName = order.lastName.replace(/[^a-zA-Z\s]/g, '')"/>
                     </p>
                     <p>
                       <strong>Number:</strong>
@@ -172,6 +180,8 @@
                     </p>
 
                 </div>
+
+                    <!-- order information -->
                 <div class="order-information">
                         <h2>Order Information</h2>
                         <p>First Name: {{ order.firstName }}</p>
@@ -184,6 +194,7 @@
                         <p>Gift? {{ order.gift }}</p>
                         <p>Method: {{ order.method }}</p>
                 </div>
+                        <!-- submit order buttons -->
                         <button v-on:click="submitOrder" :disabled="!formIsValid">Place Order</button>
             </div>
         </div>
@@ -191,197 +202,5 @@
     </div>
 
     <script src="products.js"></script>
-
-    <script type="text/javascript">
-        let app = new Vue({
-            el: '#app',
-            data: {
-                logo: "images/logo.jpg",
-                sitename: "London Tendrils International School",
-                sortOption: 'Subject',
-                sortOrder: 'asc',
-                searchQuery: '',
-                showDropdown: false,
-                
-                order: {
-                    firstName: '',
-                    lastName: '',
-                    address: '',
-                    city: '',
-                    zip: '',
-                    state: '',
-                    gift: false,
-                    method: 'Home',
-                    Number: ''
-                },
-                states: {
-                    DU: 'Dubai',
-                    SH: 'Sharjah',
-                    AJ: 'Ajman',
-                    AB: 'Abu Dhabi'
-                },
-                products: products,
-                showProducts: true,
-                cart: [],//array to store items in shopping cart
-            },
-
-
-
-
-            methods: {
-                addToCart(product) {
-                    // Check if adding to cart is possible
-                    if (this.canAddToCart(product)) {
-                        this.cart.push(product);
-                        product.Availability -= 1;
-                    }
-                },
-                canAddToCart(product) {
-                    return product.Availability > 0; // Allow adding to the cart if availability is greater than 0
-                },
-
-                availabilityMessage(availability) {
-                    if (availability === 4) {
-                        return '4 left';
-                    } else if (availability === 3) {
-                        return '3 left';
-                    } else if (availability === 2) {
-                        return '2 left';
-                    } else if (availability === 1) {
-                        return '1 left';
-                    } else {
-                        return 'No stock';
-                    }
-                },
-
-                cartCount(id) {
-                    return this.cart.filter(item => item.id === id).length;
-                },
-
-                toggleCheckout() {
-                    this.showProducts = !this.showProducts;
-                },
-
-                goHome() {
-                    this.showProducts = true;
-                },
-
-                submitOrder() {
-                    alert('Order submitted!');
-                    this.cart = []; // Clear cart after order submission
-                    this.products.forEach(product => {
-                        product.Availability = 10; // Reset to default stock
-                    });
-                },
-
-                sortedProducts() {
-                    return this.products.slice().sort((a, b) => {
-                        let modifier = this.sortOrder === 'asc' ? 1 : -1;
-                        if (this.sortOption === 'Price' || this.sortOption === 'Availability') {
-                            // For numeric sorting
-                            return (a[this.sortOption] - b[this.sortOption]) * modifier;
-                            } else if (this.sortOption === 'Subject') {
-                            // alphabet sorting
-                            return a.Subject.localeCompare(b.Subject) * modifier;
-                            } else {
-                            // string
-                            let propA = String(a[this.sortOption]).toLowerCase();
-                            let propB = String(b[this.sortOption]).toLowerCase();
-
-                            return propA > propB ? modifier : -modifier;
-                            }
-                    });
-                },
-
-                toggleSortOrder() {
-                    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
-                },
-
-                removeFromCart(item) {
-                    const index = this.cart.indexOf(item);
-                    if (index > -1) {
-                        this.cart.splice(index, 1);
-                        // Find the original classItem and increase availability
-                        const product = this.products.find(p => p.id === item.id);
-                        if (product) product.Availability += 1;
-                    }
-                },
-
-                hideDropdownWithDelay() {
-                    // Hide the dropdown with a delay to allow selecting an item before it disappears
-                    setTimeout(() => {
-                        this.showDropdown = false;
-                    }, 200);
-                },
-
-                selectFromDropdown(selectedItem) {
-                     // Set the search query to the selected item and hide dropdown.
-                    this.searchQuery = selectedItem;
-                    this.showDropdown = false;
-                },
-
-                highlightItem(product) {
-                this.selectedItem = product.Subject;  // Highlight the hovered item
-                }
-
-            },
-
-            computed: {
-                cartItemCount() {// the propoerty name 
-                    // its value is calculated when it is called
-                    return this.cart.length || 0;
-                },
-
-                isCartEmpty() {
-                    return this.cart.length === 0;
-                },
-
-                itemsLeft(product) {
-                    return product.Availability - this.cartCount(product.id);
-                },
-
-                totalPrice() {
-                    return this.cart.reduce((total, item) => total + item.Price, 0);
-                },
-
-                filteredProducts() {
-                    const query = this.searchQuery.toLowerCase();
-
-                    if (!query) {
-                        return this.sortedProducts(); 
-                    }
-
-                    const filtered = this.products.filter(product =>
-                        product.Subject.toLowerCase().includes(query)
-                    );
-
-                    const prioritized = filtered.sort((a, b) => {
-                        const aStartsWithQuery = a.Subject.toLowerCase().startsWith(query);
-                        const bStartsWithQuery = b.Subject.toLowerCase().startsWith(query);
-
-                        if (aStartsWithQuery === bStartsWithQuery) {
-                            return a.Subject.localeCompare(b.Subject);
-                        }
-
-                        return aStartsWithQuery ? -1 : 1;
-                    });
-
-                    return prioritized;
-                },
-
-                formIsValid() {// Check if all fields are filled
-                    return (
-                        this.order.firstName.trim() &&
-                        this.order.lastName.trim() &&
-                        this.order.address.trim() &&
-                        this.order.city.trim() &&
-                        this.order.zip &&
-                        this.order.state &&
-                        this.order.Number.trim()
-                    );
-                }
-            }
-        });
-    </script>
 </body>
 </html>
